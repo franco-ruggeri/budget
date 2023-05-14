@@ -28,13 +28,23 @@ def read_sheet(book, sheet_name):
 
 
 def write_summary(sheet, df):
+    # Prepare dataframe
+    df = df.reset_index()
+    columns = df.columns.tolist()
+    columns = columns[-1:] + columns[:-1]
+    df = df[columns]
+
+    # Write dataframe to Excel range
     row_offset = sum([table.range.rows.count + 2 for table in sheet.tables])
     n_rows, n_cols = df.shape
     range_ = sheet[row_offset:row_offset+n_rows+1, 0:n_cols]
     range_.options(index=False).value = df
+
+    # Improve style
+    sheet.tables.add(source=range_, table_style_name="TableStyleMedium1")
     range_.row_height = 20
     range_.column_width = 20
-    sheet.tables.add(source=range_, table_style_name="TableStyleMedium1")
+    range_.number_format = "#,##0.00"
 
 
 def summarize(book, df):
@@ -44,30 +54,15 @@ def summarize(book, df):
     summary_sheet = book.sheets.add(name=summary_sheet_name)
 
     # Group by type
-    summary_df = (
-        df
-        .groupby(by=["Type"])
-        .sum(numeric_only=True)
-        .reset_index()
-    )
+    summary_df = df.groupby(by=["Type"]).sum(numeric_only=True)
     write_summary(sheet=summary_sheet, df=summary_df)
 
     # Group by type and category
-    summary_df = (
-        df
-        .groupby(by=["Type", "Category"])
-        .sum(numeric_only=True)
-        .reset_index()
-    )
+    summary_df = df.groupby(by=["Type", "Category"]).sum(numeric_only=True)
     write_summary(sheet=summary_sheet, df=summary_df)
 
     # Group by type, category, and sub-category
-    summary_df = (
-        df
-        .groupby(by=["Type", "Category", "Sub-category"])
-        .sum(numeric_only=True)
-        .reset_index()
-    )
+    summary_df = df.groupby(by=["Type", "Category", "Sub-category"]).sum(numeric_only=True)
     write_summary(sheet=summary_sheet, df=summary_df)
 
 
