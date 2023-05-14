@@ -1,0 +1,66 @@
+# Budget
+= [@Slice] * SUMIFS(Transactions12[Projected (EUR)], Transactions12[Type], "Income")
+
+
+# Balance (budget)
+= 
+SUMIFS(Budget12[Projected], Budget12[Category], [@Category]) -
+SUMIFS(Transactions12[Projected (EUR)], Transactions12[Type], "<>Income", Transactions12[Category], [@Category])
+
+
+# Balance (currency)
+=
+SUMIFS(Transactions12[Projected], Transactions12[Currency], [@Currency], Transactions12[Type], "Income") -
+SUMIFS(Transactions12[Projected], Transactions12[Currency], [@Currency], Transactions12[Type], "<>Income")
+
+
+# Transactions (summary)
+= SUMIFS(Transactions12[Projected (EUR)], Transactions12[Type], [@Type], Transactions12[Category], [@Category])
+
+
+# Summary (type)
+= 
+SUMIFS(Transactions12[Actual (EUR)], Transactions12[Type], [@Type]) +
+SUMIFS(Transactions11[Actual (EUR)], Transactions11[Type], [@Type]) +
+SUMIFS(Transactions10[Actual (EUR)], Transactions10[Type], [@Type]) +
+SUMIFS(Transactions09[Actual (EUR)], Transactions09[Type], [@Type]) +
+SUMIFS(Transactions08[Actual (EUR)], Transactions08[Type], [@Type]) +
+SUMIFS(Transactions07[Actual (EUR)], Transactions07[Type], [@Type]) +
+SUMIFS(Transactions06[Actual (EUR)], Transactions06[Type], [@Type]) +
+SUMIFS(Transactions05[Actual (EUR)], Transactions05[Type], [@Type]) +
+SUMIFS(Transactions04[Actual (EUR)], Transactions04[Type], [@Type]) +
+SUMIFS(Transactions03[Actual (EUR)], Transactions03[Type], [@Type]) +
+SUMIFS(Transactions02[Actual (EUR)], Transactions02[Type], [@Type]) +
+SUMIFS(Transactions01[Actual (EUR)], Transactions01[Type], [@Type])
+
+
+# Summary (type + category)
+= 
+SUMIFS(Transactions12[Actual (EUR)], Transactions12[Type], [@Type], Transactions12[Category], [@Category]) +
+SUMIFS(Transactions11[Actual (EUR)], Transactions11[Type], [@Type], Transactions11[Category], [@Category]) +
+SUMIFS(Transactions10[Actual (EUR)], Transactions10[Type], [@Type], Transactions10[Category], [@Category]) +
+SUMIFS(Transactions09[Actual (EUR)], Transactions09[Type], [@Type], Transactions09[Category], [@Category]) +
+SUMIFS(Transactions08[Actual (EUR)], Transactions08[Type], [@Type], Transactions08[Category], [@Category]) +
+SUMIFS(Transactions07[Actual (EUR)], Transactions07[Type], [@Type], Transactions07[Category], [@Category]) +
+SUMIFS(Transactions06[Actual (EUR)], Transactions06[Type], [@Type], Transactions06[Category], [@Category]) +
+SUMIFS(Transactions05[Actual (EUR)], Transactions05[Type], [@Type], Transactions05[Category], [@Category]) +
+SUMIFS(Transactions04[Actual (EUR)], Transactions04[Type], [@Type], Transactions04[Category], [@Category]) +
+SUMIFS(Transactions03[Actual (EUR)], Transactions03[Type], [@Type], Transactions03[Category], [@Category]) +
+SUMIFS(Transactions02[Actual (EUR)], Transactions02[Type], [@Type], Transactions02[Category], [@Category]) +
+SUMIFS(Transactions01[Actual (EUR)], Transactions01[Type], [@Type], Transactions01[Category], [@Category])
+
+
+# Summary (type + category + sub-category)
+=
+SUMIFS(Transactions12[Actual (EUR)], Transactions12[Type], [@Type], Transactions12[Category], [@Category], Transactions12[Sub-category], [@[Sub-category]]) +
+SUMIFS(Transactions11[Actual (EUR)], Transactions11[Type], [@Type], Transactions11[Category], [@Category], Transactions11[Sub-category], [@[Sub-category]]) +
+SUMIFS(Transactions10[Actual (EUR)], Transactions10[Type], [@Type], Transactions10[Category], [@Category], Transactions10[Sub-category], [@[Sub-category]]) +
+SUMIFS(Transactions09[Actual (EUR)], Transactions09[Type], [@Type], Transactions09[Category], [@Category], Transactions09[Sub-category], [@[Sub-category]]) +
+SUMIFS(Transactions08[Actual (EUR)], Transactions08[Type], [@Type], Transactions08[Category], [@Category], Transactions08[Sub-category], [@[Sub-category]]) +
+SUMIFS(Transactions07[Actual (EUR)], Transactions07[Type], [@Type], Transactions07[Category], [@Category], Transactions07[Sub-category], [@[Sub-category]]) +
+SUMIFS(Transactions06[Actual (EUR)], Transactions06[Type], [@Type], Transactions06[Category], [@Category], Transactions06[Sub-category], [@[Sub-category]]) +
+SUMIFS(Transactions05[Actual (EUR)], Transactions05[Type], [@Type], Transactions05[Category], [@Category], Transactions05[Sub-category], [@[Sub-category]]) +
+SUMIFS(Transactions04[Actual (EUR)], Transactions04[Type], [@Type], Transactions04[Category], [@Category], Transactions04[Sub-category], [@[Sub-category]]) +
+SUMIFS(Transactions03[Actual (EUR)], Transactions03[Type], [@Type], Transactions03[Category], [@Category], Transactions03[Sub-category], [@[Sub-category]]) +
+SUMIFS(Transactions02[Actual (EUR)], Transactions02[Type], [@Type], Transactions02[Category], [@Category], Transactions02[Sub-category], [@[Sub-category]]) +
+SUMIFS(Transactions01[Actual (EUR)], Transactions01[Type], [@Type], Transactions01[Category], [@Category], Transactions01[Sub-category], [@[Sub-category]])
