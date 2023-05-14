@@ -1,7 +1,7 @@
 # Excel files
 *.xlsx
 *.xlsm
-!budget_template.xlsm
+!data/budget_template.xlsm
 
 # PyCharm
 .idea/

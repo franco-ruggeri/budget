@@ -2,7 +2,7 @@ import pandas as pd
 import xlwings as xw
 from pathlib import Path
 
-directory = Path("E:\\Users\\fruggeri\\Google Drive\\Personal\\Wellbeing\\Financial wellbeing")
+directory = Path("/")
 books_name = [f"Budget {year}.xlsm" for year in range(2022, 2023)]
 sheets_name = [f"{month:02}" for month in range(1, 13)]
 table_name_prefix = "Transactions"
