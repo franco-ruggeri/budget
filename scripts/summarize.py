@@ -1,4 +1,5 @@
 import argparse
+import re
 import pandas as pd
 import xlwings as xw
 from pathlib import Path
@@ -73,19 +74,20 @@ def get_arguments():
 
 def main():
     args = get_arguments()
-    dir_path = Path(args["dir_path"])
-    books_name = [f"budget_{year}.xlsm" for year in range(2023, 2024)]
+    dir_path = Path(args.dir_path)
     sheets_name = [f"{month:02}" for month in range(1, 13)]
     summary_book_name = "budget_summary.xlsx"
+    filename_regex = r"budget_20[0-9]{2}\.xlsm"
 
     books_df = []
     with xw.App() as app:
-        for book_name in books_name:
-            # Open book
-            book_filepath = dir_path / book_name
-            book = app.books.open(book_filepath)
+        for filepath in dir_path.iterdir():
+            if not filepath.is_file() or not re.fullmatch(filename_regex, filepath.name):
+                continue
+            print(f"Processing {filepath}...")
 
-            # Load sheets
+            # Load book
+            book = app.books.open(filepath)
             sheets_df = []
             for sheet_name in sheets_name:
                 sheet_df = read_sheet(book, sheet_name)
