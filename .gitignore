@@ -1,0 +1,7 @@
+# Excel files
+*.xlsx
+*.xlsm
+!budget_template.xlsm
+
+# PyCharm
+.idea/
