@@ -1,26 +1,20 @@
+import argparse
 import pandas as pd
 import xlwings as xw
 from pathlib import Path
 
-directory = Path(".").resolve().parent / "data"
-books_name = [f"budget_{year}.xlsm" for year in range(2023, 2024)]
-sheets_name = [f"{month:02}" for month in range(1, 13)]
-table_name_prefix = "Transactions"
-summary_book_name = "budget_summary.xlsx"
-summary_sheet_name = "Summary"
-columns_useless = [
-    "Currency",
-    "Projected",
-    "Actual",
-    "Difference",
-    "Description",
-    "Projected (EUR)",
-    "Difference (EUR)"
-]
-
 
 def read_sheet(book, sheet_name):
-    table_name = table_name_prefix + sheet_name
+    columns_useless = [
+        "Currency",
+        "Projected",
+        "Actual",
+        "Difference",
+        "Description",
+        "Projected (EUR)",
+        "Difference (EUR)"
+    ]
+    table_name = "Transactions" + sheet_name
     table = book.sheets[sheet_name].tables[table_name]
     sheet_df = table.range.expand().options(pd.DataFrame, index=0).value
     sheet_df = sheet_df.drop(columns_useless, axis=1)
@@ -48,6 +42,8 @@ def write_summary(sheet, df):
 
 
 def summarize(book, df):
+    summary_sheet_name = "Summary"
+
     # Create summary sheet
     if summary_sheet_name in [sheet.name for sheet in book.sheets]:
         book.sheets[summary_sheet_name].delete()
@@ -66,13 +62,27 @@ def summarize(book, df):
     write_summary(sheet=summary_sheet, df=summary_df)
 
 
-def main():
-    books_df = []
+def get_arguments():
+    parser = argparse.ArgumentParser(
+        description="Summarize yearly budget Excel sheets.",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter
+    )
+    parser.add_argument("dir_path", type=str, help="path to the directory containing Excel sheets .")
+    return parser.parse_args()
 
+
+def main():
+    args = get_arguments()
+    dir_path = Path(args["dir_path"])
+    books_name = [f"budget_{year}.xlsm" for year in range(2023, 2024)]
+    sheets_name = [f"{month:02}" for month in range(1, 13)]
+    summary_book_name = "budget_summary.xlsx"
+
+    books_df = []
     with xw.App() as app:
         for book_name in books_name:
             # Open book
-            book_filepath = directory / book_name
+            book_filepath = dir_path / book_name
             book = app.books.open(book_filepath)
 
             # Load sheets
@@ -92,7 +102,7 @@ def main():
         book = app.books.add()
         book_df = pd.concat(books_df)
         summarize(book, book_df)
-        book_filepath = directory / summary_book_name
+        book_filepath = dir_path / summary_book_name
         book_filepath.unlink(missing_ok=True)
         book.sheets["Sheet1"].delete()
         book.save(book_filepath)
