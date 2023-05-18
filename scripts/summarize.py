@@ -12,9 +12,9 @@ GROUP_BY = [
 ]
 
 
-def get_arguments(description):
+def get_arguments():
     parser = argparse.ArgumentParser(
-        description=description,
+        description="Summarize yearly budget Excel workbooks.",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter
     )
     parser.add_argument("dir_path", type=str, help="Path to the directory containing Excel workbooks.")
@@ -22,7 +22,7 @@ def get_arguments(description):
 
 
 def main():
-    args = get_arguments("Summarize yearly budget Excel workbooks.")
+    args = get_arguments()
     dir_path = Path(args.dir_path)
 
     budget_years = []

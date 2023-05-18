@@ -3,7 +3,8 @@ from abc import ABC, abstractmethod
 
 class Summary(ABC):
     _sheet_name = "Summary"
-    _numeric_column = "Actual (EUR)"
+    _numeric_column_old = "Actual Amount (EUR)"
+    _numeric_column_new = "Amount"
 
     def __init__(self, book):
         self._book = book
@@ -21,9 +22,11 @@ class Summary(ABC):
             # Group by
             summary = (
                 self.transactions
+                .rename(columns={self._numeric_column_old: self._numeric_column_new})
                 .groupby(by=gb).sum(numeric_only=True)
-                .loc[:, self._numeric_column]
+                .loc[:, self._numeric_column_new]
                 .reset_index()
+
             )
             columns = summary.columns.tolist()
             columns = columns[-1:] + columns[:-1]
