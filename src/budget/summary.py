@@ -40,6 +40,7 @@ class Summary(ABC):
             range_.row_height = 20
             range_.column_width = 20
             range_.number_format = "#,##0.00"
+            self._summary.autofit()
 
         self._book.save()
 
