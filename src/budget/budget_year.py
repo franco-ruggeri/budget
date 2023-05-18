@@ -1,10 +1,10 @@
 import pandas as pd
 from budget.app import App
 from budget.budget_month import BudgetMonth
-from budget.summary import Summary
+from budget.summarizable import Summarizable
 
 
-class BudgetYear(Summary):
+class BudgetYear(Summarizable):
     _month_sheets_name = [f"{m:02}" for m in range(1, 13)]
 
     def __init__(self, filepath):

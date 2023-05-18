@@ -12,4 +12,4 @@ class Singleton(type):
 
 class App(xw.App, metaclass=Singleton):
     def __del__(self):
-        super().quit()
+        self.quit()

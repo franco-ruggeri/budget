@@ -1,16 +1,16 @@
 import pandas as pd
 from pathlib import Path
 from budget.app import App
-from budget.summary import Summary
+from budget.summarizable import Summarizable
 
 
-class BudgetYears(Summary):
+class BudgetYears(Summarizable):
     def __init__(self, filepath, budget_years):
+        self.budget_years = budget_years.copy()
+
         app = App()
         book = app.books.add()
         super().__init__(book)
-
-        self.budget_years = budget_years
 
         filepath = Path(filepath)
         filepath.unlink(missing_ok=True)
