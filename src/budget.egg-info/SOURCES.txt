@@ -1,9 +1,0 @@
-pyproject.toml
-src/budget/__init__.py
-src/budget/budget_month.py
-src/budget/budget_year.py
-src/budget.egg-info/PKG-INFO
-src/budget.egg-info/SOURCES.txt
-src/budget.egg-info/dependency_links.txt
-src/budget.egg-info/requires.txt
-src/budget.egg-info/top_level.txt
