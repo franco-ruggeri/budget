@@ -1,7 +1,7 @@
 import pandas as pd
-from budget import app
+from budget.app import App
 from budget.budget_month import BudgetMonth
-from budget.utils import summarize
+from budget.summary import Summary
 
 
 class BudgetYear:
@@ -9,29 +9,31 @@ class BudgetYear:
     _summary_sheet_name = "Summary"
 
     def __init__(self, filepath):
+        # Open book
+        app = App()
         self.book = app.books.open(filepath)
+
+        # Get monthly budget sheets
         sheets = [self.book.sheets[sn] for sn in self._month_sheets_name]
         self.budget_months = [BudgetMonth(s) for s in sheets]
 
-    # TODO: instead of this drop_columns, I can just call remove_columns(), but I need also an explicit save function
-    def summarize(self, group_by, drop_columns):
-        # Create summary sheet
-        if self.has_summary():
-            self.book.sheets[self._summary_sheet_name].delete()
-        sheet = self.book.sheets.add(name=self._summary_sheet_name)
+    def summarize(self, group_by):
+        # Get sheet
+        sheets_name = [sheet.name for sheet in self.book.sheets]
+        if self._summary_sheet_name not in sheets_name:
+            self.book.sheets.add(name=self._summary_sheet_name)
+        sheet = self.book.sheets[self._summary_sheet_name]
 
-        # Write summary
+        # Create summary
         transactions = self.get_transactions()
-        for gp in group_by:
-            summarize(sheet, transactions, gp, drop_columns)
+        summary = Summary(sheet, transactions)
+        summary.summarize(group_by)
+
+        # Save book
         self.book.save()
 
     def get_transactions(self):
         return pd.concat([bm.get_transactions() for bm in self.budget_months])
-
-    def has_summary(self):
-        sheets_name = [sheet.name for sheet in self.book.sheets]
-        return self._summary_sheet_name in sheets_name
 
     def __del__(self):
         self.book.close()

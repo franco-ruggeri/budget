@@ -3,31 +3,25 @@ import argparse
 import re
 import budget
 
-
-summary_book_name = "budget_summary.xlsx"
-filename_regex = r"budget_20[0-9]{2}\.xlsm"
-group_by = [
+SUMMARY_BOOK_NAME = "budget_summary.xlsx"
+FILENAME_REGEX = r"budget_20[0-9]{2}\.xlsm"
+GROUP_BY = [
     ["Type"],
     ["Type", "Category"],
-    ["Type", "Category", "Sub-category"]
-]
-drop_columns = [
-    "Currency",
-    "Projected",
-    "Actual",
-    "Difference",
-    "Description",
-    "Projected (EUR)",
-    "Difference (EUR)"
+    ["Type", "Category", "Sub-category"],
 ]
 
 
 def get_arguments():
     parser = argparse.ArgumentParser(
-        description="Summarize yearly budget Excel sheets.",
+        description="Summarize yearly budget Excel workbooks.",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter
     )
-    parser.add_argument("dir_path", type=str, help="path to the directory containing Excel sheets .")
+    parser.add_argument(
+        "dir_path",
+        type=str,
+        help="path to the directory containing Excel sheets ."
+    )
     return parser.parse_args()
 
 
@@ -37,17 +31,17 @@ def main():
 
     budget_years = []
     for filepath in dir_path.iterdir():
-        if not filepath.is_file() or not re.fullmatch(filename_regex, filepath.name):
+        if not filepath.is_file() or not re.fullmatch(FILENAME_REGEX, filepath.name):
             continue
-        print(f"Processing {filepath}...")
+        print(f"Summarizing {filepath}...")
         budget_year = budget.BudgetYear(filepath)
-        budget_year.summarize(group_by, drop_columns)
+        budget_year.summarize(GROUP_BY)
         budget_years.append(budget_year)
 
-    filepath = dir_path / summary_book_name
-    print(f"Writing final summary in {filepath}")
-    budget_years = budget.BudgetYears(filepath, budget_years)
-    budget_years.summarize(group_by, drop_columns)
+    filepath = dir_path / SUMMARY_BOOK_NAME
+    print(f"Summarizing everything in {filepath}...")
+    budget_summary = budget.BudgetYears(filepath, budget_years)
+    budget_summary.summarize(GROUP_BY)
 
 
 if __name__ == "__main__":
