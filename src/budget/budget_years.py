@@ -4,30 +4,19 @@ from budget.app import App
 from budget.summary import Summary
 
 
-class BudgetYears:
-    _summary_sheet_name = "Summary"
-
+class BudgetYears(Summary):
     def __init__(self, filepath, budget_years):
-        self.budget_years = budget_years
-
         app = App()
-        self.book = app.books.add()
+        book = app.books.add()
+        super().__init__(book)
+
+        self.budget_years = budget_years
 
         filepath = Path(filepath)
         filepath.unlink(missing_ok=True)
-        self.book.save(filepath)
+        self._book.sheets["Sheet1"].delete()
+        self._book.save(filepath)
 
-        self._sheet = self.book.sheets["Sheet1"]
-        self._sheet.name = self._summary_sheet_name
-
-    def summarize(self, group_by):
-        # Create summary
-        transactions = pd.concat([by.get_transactions() for by in self.budget_years])
-        summary = Summary(self._sheet, transactions)
-        summary.summarize(group_by)
-
-        # Save book
-        self.book.save()
-
-    def __del__(self):
-        self.book.close()
+    @property
+    def transactions(self):
+        return pd.concat([by.transactions for by in self.budget_years])

@@ -1,10 +1,10 @@
-from pathlib import Path
 import argparse
 import re
 import budget
+from pathlib import Path
 
-SUMMARY_BOOK_NAME = "budget_summary.xlsx"
 FILENAME_REGEX = r"budget_20[0-9]{2}\.xlsm"
+SUMMARY_BOOK_NAME = "budget_summary.xlsx"
 GROUP_BY = [
     ["Type"],
     ["Type", "Category"],
@@ -12,21 +12,17 @@ GROUP_BY = [
 ]
 
 
-def get_arguments():
+def get_arguments(description):
     parser = argparse.ArgumentParser(
-        description="Summarize yearly budget Excel workbooks.",
+        description=description,
         formatter_class=argparse.ArgumentDefaultsHelpFormatter
     )
-    parser.add_argument(
-        "dir_path",
-        type=str,
-        help="path to the directory containing Excel sheets ."
-    )
+    parser.add_argument("dir_path", type=str, help="Path to the directory containing Excel workbooks.")
     return parser.parse_args()
 
 
 def main():
-    args = get_arguments()
+    args = get_arguments("Summarize yearly budget Excel workbooks.")
     dir_path = Path(args.dir_path)
 
     budget_years = []
@@ -38,10 +34,11 @@ def main():
         budget_year.summarize(GROUP_BY)
         budget_years.append(budget_year)
 
-    filepath = dir_path / SUMMARY_BOOK_NAME
-    print(f"Summarizing everything in {filepath}...")
-    budget_summary = budget.BudgetYears(filepath, budget_years)
-    budget_summary.summarize(GROUP_BY)
+    if len(budget_years) > 0:
+        filepath = dir_path / SUMMARY_BOOK_NAME
+        print(f"Summarizing everything in {filepath}...")
+        budget_summary = budget.BudgetYears(filepath, budget_years)
+        budget_summary.summarize(GROUP_BY)
 
 
 if __name__ == "__main__":
