@@ -6,16 +6,18 @@ from budget.summarizable import Summarizable
 
 class BudgetYears(Summarizable):
     def __init__(self, filepath, budget_years):
-        self.budget_years = budget_years.copy()
-
+        filepath = Path(filepath)
         app = App()
-        book = app.books.add()
+        if not filepath.exists():
+            book = app.books.add()
+            filepath = Path(filepath)
+            filepath.unlink(missing_ok=True)
+            self._book.save(filepath)
+        else:
+            book = app.books.open(filepath)
         super().__init__(book)
 
-        filepath = Path(filepath)
-        filepath.unlink(missing_ok=True)
-        self._book.sheets["Sheet1"].delete()
-        self._book.save(filepath)
+        self.budget_years = budget_years.copy()
 
     @property
     def transactions(self):
