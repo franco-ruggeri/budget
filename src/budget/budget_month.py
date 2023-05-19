@@ -11,6 +11,7 @@ class BudgetMonth:
         assert len(table_names) == 1
         table_name = table_names[0]
         self.table = self.sheet.tables[table_name]
+        self.table.show_autofilter = False
 
     @property
     def transactions(self):
