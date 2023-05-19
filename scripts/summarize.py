@@ -7,16 +7,16 @@ from pathlib import Path
 FILENAME_REGEX = r"budget_20[0-9]{2}\.xlsm"
 SUMMARY_BOOK_NAME = "budget_summary.xlsx"
 GROUP_BY = [
-    ["Type", "Actual Currency"],
+    ["Actual Currency", "Type"],
     ["Type"],
     ["Type", "Category"],
-    ["Type", "Category", "Sub-category"],
+    ["Actual Currency", "Type", "Category", "Sub-category"],
 ]
 AMOUNT_LABELS = [
     ["Actual Amount (EUR)", "Actual Amount"],
     ["Actual Amount (EUR)"],
     ["Actual Amount (EUR)"],
-    ["Actual Amount (EUR)"],
+    ["Actual Amount (EUR)", "Actual Amount"],
 ]
 
 
