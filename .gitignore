@@ -12,3 +12,4 @@
 # Python package
 *.egg-info/
 __pycache__/
+/build/
