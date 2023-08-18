@@ -3,6 +3,9 @@
 *.xlsm
 !data/budget_template.xlsm
 
+# MacOS
+.DS_Store
+
 # Visual Studio Code
 .vscode
 
