@@ -1,6 +1,8 @@
-import pandas as pd
+import time
 from pathlib import Path
-from budget.app import App
+
+import pandas as pd
+from budget.xlwings.app import App
 
 
 class BudgetSummary:
@@ -19,11 +21,14 @@ class BudgetSummary:
             self.book.save(filepath)
         else:
             self.book = app.books.open(filepath)
+            time.sleep(1)
 
         # Create summary sheets
         sheets_name = [sheet.name for sheet in self.book.sheets]
         if self._summary_name not in sheets_name:
-            self.book.sheets.add(name=self._summary_name, before=self.book.sheets[0])
+            self.book.sheets.add(
+                name=self._summary_name, before=self.book.sheets[0]
+            )
         self.summary = self.book.sheets[self._summary_name]
         self.summary_years = []
         for by in self.budget_years:
@@ -37,8 +42,7 @@ class BudgetSummary:
     def _summarize(group_by, amount_labels, transactions, sheet):
         # Summarize
         summary = (
-            transactions
-            .loc[:, [*group_by, *amount_labels]]
+            transactions.loc[:, [*group_by, *amount_labels]]
             .groupby(by=group_by)
             .sum(numeric_only=True)
             .reset_index()
@@ -51,9 +55,11 @@ class BudgetSummary:
         summary = summary[columns]
 
         # Write dataframe to Excel range
-        row_offset = sum([table.range.rows.count + 2 for table in sheet.tables])
+        row_offset = sum(
+            [table.range.rows.count + 2 for table in sheet.tables]
+        )
         n_rows, n_cols = summary.shape
-        range_ = sheet[row_offset:row_offset + n_rows + 1, 0:n_cols]
+        range_ = sheet[row_offset : row_offset + n_rows + 1, 0:n_cols]
         range_.options(index=False).value = summary
 
         # Improve style
@@ -66,7 +72,9 @@ class BudgetSummary:
     def summarize(self, group_by, amount_labels):
         for by, s in zip(self.budget_years, self.summary_years):
             self._summarize(group_by, amount_labels, by.transactions, s)
-        self._summarize(group_by, amount_labels, self.transactions, self.summary)
+        self._summarize(
+            group_by, amount_labels, self.transactions, self.summary
+        )
         self.book.save()
 
     @property

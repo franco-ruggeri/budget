@@ -3,6 +3,9 @@
 *.xlsm
 !data/budget_template.xlsm
 
+# Visual Studio Code
+.vscode
+
 # PyCharm
 .idea/
 

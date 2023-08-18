@@ -1,6 +1,8 @@
+import time
+
 import pandas as pd
-from budget.app import App
-from budget.budget_month import BudgetMonth
+from budget.xlwings.app import App
+from budget.xlwings.budget_month import BudgetMonth
 
 
 class BudgetYear:
@@ -10,6 +12,7 @@ class BudgetYear:
         # Open book
         app = App()
         self.book = app.books.open(filepath)
+        time.sleep(1)
 
         # Get monthly budget sheets
         sheets = [self.book.sheets[sn] for sn in self._month_sheets_name]

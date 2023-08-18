@@ -5,7 +5,24 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "budget"
 version = "0.0.1"
+authors = [
+    { name="Franco Ruggeri", email="francoruggeri95@gmail.com" },
+]
+description = "Application for personal budgeting"
 dependencies = [
     "xlwings",
     "pandas",
 ]
+
+[project.scripts]
+budget = "budget.cli.__main__:main"
+
+[tool.setuptools.packages.find]
+include=["budget*"]
+
+[tool.pylint."MESSAGE CONTROL"]
+disable="""
+    missing-module-docstring,
+    missing-function-docstring,
+    missing-class-docstring,
+"""

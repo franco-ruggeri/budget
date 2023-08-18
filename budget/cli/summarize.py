@@ -1,8 +1,9 @@
 import argparse
-import re
-from tqdm import tqdm
-from budget import BudgetYear, BudgetSummary
 from pathlib import Path
+import re
+
+from tqdm import tqdm
+from budget.xlwings import BudgetYear, BudgetSummary
 
 FILENAME_REGEX = r"budget_20[0-9]{2}\.xlsm"
 SUMMARY_BOOK_NAME = "budget_summary.xlsx"
@@ -20,22 +21,20 @@ AMOUNT_LABELS = [
 ]
 
 
-def get_arguments():
-    parser = argparse.ArgumentParser(
-        description="Summarize yearly budget Excel workbooks.",
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter
-    )
-    parser.add_argument("dir_path", type=str, help="Path to the directory containing Excel workbooks.")
-    return parser.parse_args()
+def add_arguments(subparsers):
+    parser = subparsers.add_parser("summarize")
+    parser.add_argument("dir_path", type=str)
+    parser.set_defaults(func=run)
 
 
-def main():
-    args = get_arguments()
+def run(args):
     dir_path = Path(args.dir_path)
 
     budgets_years = []
     for filepath in dir_path.iterdir():
-        if not filepath.is_file() or not re.fullmatch(FILENAME_REGEX, filepath.name):
+        if not filepath.is_file() or not re.fullmatch(
+            FILENAME_REGEX, filepath.name
+        ):
             continue
         print(f"Loading {filepath}...")
         budgets_years.append(BudgetYear(filepath))
@@ -44,9 +43,11 @@ def main():
         filepath = dir_path / SUMMARY_BOOK_NAME
         budget_summary = BudgetSummary(filepath, budgets_years)
         budget_summary.clear_summary()
-        for gb, al in tqdm(list(zip(GROUP_BY, AMOUNT_LABELS)), desc="Summarizing"):
-            budget_summary.summarize(group_by=gb, amount_labels=al)
-
-
-if __name__ == "__main__":
-    main()
+        for group_by, amount_labels in tqdm(
+            list(zip(GROUP_BY, AMOUNT_LABELS)),
+            desc="Summarizing",
+        ):
+            budget_summary.summarize(
+                group_by=group_by,
+                amount_labels=amount_labels,
+            )
