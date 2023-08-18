@@ -1,4 +1,3 @@
-import argparse
 from pathlib import Path
 import re
 
@@ -43,11 +42,11 @@ def run(args):
         filepath = dir_path / SUMMARY_BOOK_NAME
         budget_summary = BudgetSummary(filepath, budgets_years)
         budget_summary.clear_summary()
-        for group_by, amount_labels in tqdm(
+        for gb, al in tqdm(
             list(zip(GROUP_BY, AMOUNT_LABELS)),
             desc="Summarizing",
         ):
             budget_summary.summarize(
-                group_by=group_by,
-                amount_labels=amount_labels,
+                group_by=gb,
+                amount_labels=al,
             )
