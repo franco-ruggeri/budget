@@ -7,7 +7,11 @@ class BudgetMonth:
 
     def __init__(self, sheet):
         self.sheet = sheet
-        table_names = [t.name for t in sheet.tables if re.fullmatch(self._table_regex, t.name)]
+        table_names = [
+            t.name
+            for t in sheet.tables
+            if re.fullmatch(self._table_regex, t.name)
+        ]
         assert len(table_names) == 1
         table_name = table_names[0]
         self.table = self.sheet.tables[table_name]
@@ -15,4 +19,7 @@ class BudgetMonth:
 
     @property
     def transactions(self):
-        return self.table.range.expand().options(pd.DataFrame, index=False).value
+        transactions = (
+            self.table.range.expand().options(pd.DataFrame, index=False).value
+        )
+        return transactions

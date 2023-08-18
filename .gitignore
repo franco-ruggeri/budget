@@ -3,9 +3,16 @@
 *.xlsm
 !data/budget_template.xlsm
 
+# MacOS
+.DS_Store
+
+# Visual Studio Code
+.vscode
+
 # PyCharm
 .idea/
 
 # Python package
 *.egg-info/
 __pycache__/
+/build/
