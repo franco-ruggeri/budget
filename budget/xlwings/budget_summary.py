@@ -40,12 +40,17 @@ class BudgetSummary:
 
     @staticmethod
     def _summarize(group_by, amount_labels, transactions, sheet):
+        # Filter
+        transactions = transactions.loc[
+            :, [*group_by, *amount_labels]
+        ].dropna()
+        for al in amount_labels:
+            transactions[al] = pd.to_numeric(transactions[al])
+
         # Summarize
         summary = (
-            transactions.loc[:, [*group_by, *amount_labels]]
-            .dropna()
-            .groupby(by=group_by)
-            .sum(numeric_only=False)
+            transactions.groupby(by=group_by)
+            .sum(numeric_only=True)
             .reset_index()
         )
 

@@ -30,7 +30,7 @@ def run(args):
     dir_path = Path(args.dir_path)
 
     budgets_years = []
-    for filepath in dir_path.iterdir():
+    for filepath in sorted(list(dir_path.iterdir())):
         if not filepath.is_file() or not re.fullmatch(
             FILENAME_REGEX, filepath.name
         ):
@@ -38,15 +38,17 @@ def run(args):
         print(f"Loading {filepath}...")
         budgets_years.append(BudgetYear(filepath))
 
-    if len(budgets_years) > 0:
-        filepath = dir_path / SUMMARY_BOOK_NAME
-        budget_summary = BudgetSummary(filepath, budgets_years)
-        budget_summary.clear_summary()
-        for gb, al in tqdm(
-            list(zip(GROUP_BY, AMOUNT_LABELS)),
-            desc="Summarizing",
-        ):
-            budget_summary.summarize(
-                group_by=gb,
-                amount_labels=al,
-            )
+    if len(budgets_years) == 0:
+        return
+
+    filepath = dir_path / SUMMARY_BOOK_NAME
+    budget_summary = BudgetSummary(filepath, budgets_years)
+    budget_summary.clear_summary()
+    for gb, al in tqdm(
+        list(zip(GROUP_BY, AMOUNT_LABELS)),
+        desc="Summarizing",
+    ):
+        budget_summary.summarize(
+            group_by=gb,
+            amount_labels=al,
+        )
