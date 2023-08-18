@@ -43,8 +43,9 @@ class BudgetSummary:
         # Summarize
         summary = (
             transactions.loc[:, [*group_by, *amount_labels]]
+            .dropna()
             .groupby(by=group_by)
-            .sum(numeric_only=True)
+            .sum(numeric_only=False)
             .reset_index()
         )
 
