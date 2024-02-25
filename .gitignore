@@ -1,8 +1,3 @@
-# Excel files
-*.xlsx
-*.xlsm
-!data/budget_template.xlsm
-
 # MacOS
 .DS_Store
 
@@ -11,8 +6,3 @@
 
 # PyCharm
 .idea/
-
-# Python package
-*.egg-info/
-__pycache__/
-/build/

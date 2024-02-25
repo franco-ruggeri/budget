@@ -15,9 +15,6 @@ dependencies = [
 ]
 requires-python = ">=3.10"
 
-[project.scripts]
-budget = "budget.cli.__main__:main"
-
 [tool.setuptools.packages.find]
 include=["budget*"]
 
