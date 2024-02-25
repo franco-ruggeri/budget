@@ -4,5 +4,5 @@
 # Visual Studio Code
 .vscode
 
-# PyCharm
-.idea/
+# Poetry
+/dist

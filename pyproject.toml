@@ -1,22 +1,18 @@
-[build-system]
-requires = ["setuptools"]
-build-backend = "setuptools.build_meta"
-
-[project]
+[tool.poetry]
 name = "budget"
-version = "0.0.1"
-authors = [
-    { name="Franco Ruggeri", email="francoruggeri95@gmail.com" },
-]
-description = "Application for personal budgeting"
-dependencies = [
-    "xlwings",
-    "pandas",
-]
-requires-python = ">=3.10"
+version = "0.1.0"
+description = ""
+authors = ["Franco Ruggeri <francoruggeri95@gmail.com>"]
+readme = "README.md"
 
-[tool.setuptools.packages.find]
-include=["budget*"]
+[tool.poetry.dependencies]
+python = "^3.10"
+streamlit = "^1.31.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
 
 [tool.pylint."MESSAGE CONTROL"]
 disable="""
